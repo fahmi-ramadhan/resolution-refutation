@@ -17,7 +17,7 @@ def parse_arguments():
     Parses command-line arguments.
     
     Returns:
-        tuple: (kb_file, query_file, verbose)
+        tuple: (kb_file, query_file, verbose, no_query)
     """
     parser = argparse.ArgumentParser(
         description='Propositional Logic Resolution Prover',
@@ -26,6 +26,7 @@ def parse_arguments():
 Examples:
   python main.py kb.txt query.txt       # Run resolution without verbose output
   python main.py kb.txt query.txt -v    # Run resolution with verbose output
+  python main.py kb.txt --no-query      # Run only knowledge base check without query
   
 File format:
   - Each line in the files should contain a propositional logic formula
@@ -35,13 +36,23 @@ File format:
         """
     )
     parser.add_argument('kb_file', help='Path to the knowledge base file')
-    parser.add_argument('query_file', help='Path to the query file')
+    parser.add_argument('query_file', nargs='?', help='Path to the query file')
     parser.add_argument('-v', '--verbose', action='store_true', 
                         help='Print resolution steps')
-
+    parser.add_argument('--no-query', action='store_true',
+                        help='Run only knowledge base check without query')
+    
     args = parser.parse_args()
-    return args.kb_file, args.query_file, args.verbose
-
+    
+    # Check if --no-query is provided but query_file is also provided
+    if args.no_query and args.query_file:
+        parser.error("Cannot provide both query_file and --no-query")
+    
+    # Check if neither query_file nor --no-query is provided
+    if not args.no_query and not args.query_file:
+        parser.error("Either query_file or --no-query must be provided")
+    
+    return args.kb_file, args.query_file, args.verbose, args.no_query
 
 def read_from_file(filename):
     """
@@ -70,9 +81,7 @@ def read_from_file(filename):
     except Exception as e:
         print(f"Error reading file {filename}: {e}")
         sys.exit(1)
-
     return sentences
-
 
 def main():
     """
@@ -81,34 +90,46 @@ def main():
     Returns:
         int: 0 for successful execution, 1 for errors
     """
-    kb_file, query_file, verbose = parse_arguments()
-
+    kb_file, query_file, verbose, no_query = parse_arguments()
     kb_sentences = read_from_file(kb_file)
-    query_sentences = read_from_file(query_file)
-
-    if not query_sentences:
-        print("Error: No query found in the query file.")
-        return 1
-
+    
     # Process the knowledge base
     knowledge_base = []
     for sentence in kb_sentences:
         sentence = to_cnf(segment_sentence(sentence))
         knowledge_base += sentence.copy()
         knowledge_base.append("&")
-
-    # Process the query
-    query = query_sentences[0]
-    query = to_cnf(segment_sentence("!("+query+")"))
- 
-    # Do the resolution refutation procedure
-    result = resolve(knowledge_base.copy() + query.copy(), verbose)
-    if result:
-        print(f"{Fore.GREEN}Knowledge base entails the query.{Style.RESET_ALL}")
-        return 0
+    
+    if no_query:
+        # Just check if the knowledge base is consistent (not self-contradictory)
+        # To check consistency, we see if we can derive a contradiction
+        knowledge_base.pop()  # Remove the last "&"
+        result = not resolve(knowledge_base.copy(), verbose)
+        if result:
+            print(f"{Fore.GREEN}Knowledge base is consistent.{Style.RESET_ALL}")
+            return 0
+        else:
+            print(f"{Fore.RED}Knowledge base is inconsistent (self-contradictory).{Style.RESET_ALL}")
+            return 1
     else:
-        print(f"{Fore.RED}Knowledge base does not entail the query.{Style.RESET_ALL}")
-        return 1
+        # Normal mode with a query
+        query_sentences = read_from_file(query_file)
+        if not query_sentences:
+            print("Error: No query found in the query file.")
+            return 1
+            
+        # Process the query
+        query = query_sentences[0]
+        query = to_cnf(segment_sentence("!("+query+")"))
+    
+        # Do the resolution refutation procedure
+        result = resolve(knowledge_base.copy() + query.copy(), verbose)
+        if result:
+            print(f"{Fore.GREEN}Knowledge base entails the query.{Style.RESET_ALL}")
+            return 0
+        else:
+            print(f"{Fore.RED}Knowledge base does not entail the query.{Style.RESET_ALL}")
+            return 1
 
 if __name__ == "__main__":
     sys.exit(main())

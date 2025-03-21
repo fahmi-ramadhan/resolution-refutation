@@ -20,5 +20,15 @@ This project implements a propositional logic resolution prover. It includes mod
 To run the resolution prover, use the following command:
 
 ```sh
+# Run with knowledge base and query files
 python main.py <kb_file> <query_file> [-v]
+
+# Run only with knowledge base to check for consistency
+python main.py <kb_file> --no-query [-v]
+```
+
+For detailed usage information, examples, and file format specifications, run:
+
+```sh
+python main.py -h
 ```
