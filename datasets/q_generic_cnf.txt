@@ -1,0 +1,6 @@
+#Ref: https://ieeexplore.ieee.org/document/5365721/
+#PDF: https://remote-lib.ui.ac.id:2147/stamp/stamp.jsp?tp=&arnumber=5365721&tag=1
+#run: python main.py datasets/kb_generic_cnf.txt datasets/q_generic_cnf.txt -v
+#Belum dites sampai kelar soalnya kelamaan
+
+(!a | !b | !c | !d | e | !f | !g | h | !i | j | !k | l | m | !n | !o | !p | !q | !r)

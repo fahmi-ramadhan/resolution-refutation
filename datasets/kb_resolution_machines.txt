@@ -1,0 +1,10 @@
+#Ref: https://www.proquest.com/docview/2269042739/BE4C6C14AA7F4FBEPQ/2?accountid=17242&sourcetype=Dissertations%20&%20Theses
+
+a | b
+c | !e
+!b | c
+!d | !a
+!a | !b
+!c | !d
+d | e
+!c | b

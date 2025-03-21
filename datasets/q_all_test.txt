@@ -1,0 +1,4 @@
+#cek semua operator bisa
+#run: python main.py datasets/kb_all_test.txt datasets/q_all_test.txt -v
+
+!Raining

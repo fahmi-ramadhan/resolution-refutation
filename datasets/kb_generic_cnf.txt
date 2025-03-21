@@ -1,0 +1,34 @@
+#Ref: https://ieeexplore.ieee.org/document/5365721/
+#PDF: https://remote-lib.ui.ac.id:2147/stamp/stamp.jsp?tp=&arnumber=5365721&tag=1
+#Belum dites sampai kelar soalnya kelamaan
+
+!b  | c
+!b | !d
+d | e
+!i | e
+!b | f
+b | !f
+!g | f
+!b | !e
+!b | e | c
+!c | !e | b
+g | !i | c
+!c | !d | e
+e | h | !a
+g | !d | i | !q
+g | h | !i | r
+!g | !h | !q
+g | h | i | q
+!k |l
+!k | !m
+m | n
+!r | n
+!k | o
+!o | k
+!p | o
+!k | !n
+!k | n | l
+!l | !n | k
+p | !r | l
+l | !m | n
+n | q | j

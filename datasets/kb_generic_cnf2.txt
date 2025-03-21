@@ -1,0 +1,9 @@
+#Ref: https://ieeexplore.ieee.org/document/5365721/
+#PDF: https://remote-lib.ui.ac.id:2147/stamp/stamp.jsp?tp=&arnumber=5365721&tag=1
+
+d | e
+!a | e | h
+!d | !q
+h | q
+m | n
+!j | n | q

@@ -1,0 +1,4 @@
+#Ref: https://ieeexplore.ieee.org/document/5365721/
+#run: python main.py datasets/kb_generic_cnf2.txt datasets/q_generic_cnf2.txt -v
+
+!a | d | e | h | !j | m | n | !q

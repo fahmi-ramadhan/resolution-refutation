@@ -1,0 +1,11 @@
+#cek semua operator bisa
+
+Raining > Wet
+SprinklersOn > Wet
+Wet > (Raining ∣ SprinklersOn)
+Raining > Cloudy
+!(Raining & Dry)
+Dry > (!Raining & !SprinklersOn)
+Cloudy > ( Raining ∣ Humid)
+Dry
+Humid = SprinklersOn
