@@ -66,16 +66,17 @@ def format_clause(clause):
 
 def resolve_clause_pair(clause1, clause2):
     """
-    Resolves two clauses and returns a set of resulting resolvents.
+    Resolves two clauses and returns a set of resulting resolvents along with the eliminated literals.
     
     Args:
         clause1 (frozenset): First clause
         clause2 (frozenset): Second clause
     
     Returns:
-        set: Set of resolvent clauses
+        list: List of tuples (resolvent_clause, eliminated_pair) where eliminated_pair is a string
+              representing the complementary literals that were eliminated
     """
-    resolvents = set()
+    resolvents = []
 
     for literal in clause1:
         # Compute the negation of the literal
@@ -84,7 +85,9 @@ def resolve_clause_pair(clause1, clause2):
         if neg_literal in clause2:
             # Create new clause by removing the complementary literals and combining the rest
             new_clause = frozenset(clause1.difference({literal}).union(clause2.difference({neg_literal})))
-            resolvents.add(new_clause)
+            # Track which complementary literals were eliminated
+            eliminated_pair = f"{literal}/{neg_literal}"
+            resolvents.append((new_clause, eliminated_pair))
 
     return resolvents
 
@@ -140,23 +143,16 @@ def resolve(sentence, mode):
         for i in range(len(clause_list)):
             for j in range(i+1, len(clause_list)):
                 c1, c2 = clause_list[i], clause_list[j]
-                resolvents = resolve_clause_pair(c1, c2)
+                resolvent_pairs = resolve_clause_pair(c1, c2)
                 
                 # Process each resolvent
-                for resolvent in resolvents:
+                for resolvent, eliminated in resolvent_pairs:
                     if resolvent not in clause_set:
                         if mode:
                             step_counter += 1
-                            # Find the complementary literals
-                            complementary = []
-                            for lit in c1:
-                                neg_lit = lit[1:] if lit.startswith("!") else "!" + lit
-                                if neg_lit in c2:
-                                    complementary.append(f"{lit}/{neg_lit}")
-                            
                             print(f"  {Fore.YELLOW}Step {step_counter}:{Style.RESET_ALL} Resolving {Fore.MAGENTA}{format_clause(c1)}{Style.RESET_ALL} and {Fore.MAGENTA}{format_clause(c2)}{Style.RESET_ALL}")
                             print(f"    {Fore.BLUE}Derived:{Style.RESET_ALL} {Fore.GREEN}{format_clause(resolvent)}{Style.RESET_ALL}")
-                            print(f"    {Fore.RED}(Eliminated: {', '.join(complementary)}){Style.RESET_ALL}")
+                            print(f"    {Fore.RED}(Eliminated: {eliminated}){Style.RESET_ALL}")
                         
                         new_resolvents.add(resolvent)
                         
