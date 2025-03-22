@@ -9,7 +9,9 @@ import sys
 from colorama import Fore, Style
 from parser import segment_sentence
 from cnf_converter import to_cnf
-from resolver import resolve
+#uncomment the version you want to use
+#from resolver import resolve
+from resolver_new import resolve
 
 
 def parse_arguments():
