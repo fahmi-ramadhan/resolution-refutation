@@ -182,7 +182,8 @@ class TestResolver(unittest.TestCase):
         query = "A"
         kb_cnf = to_cnf(segment_sentence(kb))
         neg_query_cnf = to_cnf(segment_sentence("!("+query+")"))
-        self.assertTrue(resolve(kb_cnf + ['&'] + neg_query_cnf, True))
+        result, _, _, _ = resolve(kb_cnf + ['&'] + neg_query_cnf, True)
+        self.assertTrue(result)
 
     def test_resolution_false(self):
         """Test resolution that should return False."""
@@ -190,7 +191,8 @@ class TestResolver(unittest.TestCase):
         query = "C"
         kb_cnf = to_cnf(segment_sentence(kb))
         neg_query_cnf = to_cnf(segment_sentence("!("+query+")"))
-        self.assertFalse(resolve(kb_cnf + ['&'] + neg_query_cnf, False))
+        result, _, _, _ = resolve(kb_cnf + ['&'] + neg_query_cnf, False)
+        self.assertFalse(result)
 
 
 if __name__ == '__main__':
