@@ -6,6 +6,9 @@ Implements resolution refutation procedure for propositional logic formulas.
 import colorama
 from colorama import Fore, Style
 from parser import forward_slice
+import time
+import psutil
+import os
 
 colorama.init(autoreset=True)
 
@@ -92,6 +95,19 @@ def resolve_clause_pair(clause1, clause2):
     return resolvents
 
 
+def get_memory_usage():
+    """
+    Get current memory usage of the process.
+    
+    Returns:
+        float: Memory usage in MB
+    """
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    # Convert to MB
+    return memory_info.rss / (1024 * 1024)
+
+
 def resolve(sentence, mode):
     """
     Resolves the given sentence using the resolution principle.
@@ -101,8 +117,15 @@ def resolve(sentence, mode):
         mode (bool): Whether to print resolution steps
     
     Returns:
-        bool: True if the KB entails the query, False otherwise
+        tuple: (result, time_taken, peak_memory)
+            - result (bool): True if the KB entails the query, False otherwise
+            - time_taken (float): Time taken for resolution in seconds
+            - peak_memory (float): Peak memory usage during resolution in MB
     """
+    start_time = time.time()
+    initial_memory = get_memory_usage()
+    peak_memory = initial_memory
+    
     # Convert to clause format
     clause = []
     clause_maps = []
@@ -139,6 +162,10 @@ def resolve(sentence, mode):
         prev_length = len(clause_set)
         new_resolvents = set()
         
+        # Check current memory usage
+        current_memory = get_memory_usage()
+        peak_memory = max(peak_memory, current_memory)
+        
         clause_list = list(clause_set)
         for i in range(len(clause_list)):
             for j in range(i+1, len(clause_list)):
@@ -156,14 +183,33 @@ def resolve(sentence, mode):
                         
                         new_resolvents.add(resolvent)
                         
-                        # Check for empty clause immediately
+                        # Check for empty clause
                         if len(resolvent) == 0:
                             if mode:
                                 print(f"{Fore.GREEN}Empty clause found! Contradiction achieved.{Style.RESET_ALL}")
-                            return True
+                            
+                            end_time = time.time()
+                            time_taken = end_time - start_time
+                            
+                            # Final memory check
+                            current_memory = get_memory_usage()
+                            peak_memory = max(peak_memory, current_memory)
+                            
+                            return True, time_taken, peak_memory
+                
+                # Regular memory check during resolution
+                current_memory = get_memory_usage()
+                peak_memory = max(peak_memory, current_memory)
             
         # Add new resolvents to clause set
         clause_set.update(new_resolvents)
     
     # If we get here without finding an empty clause, the KB doesn't entail the query
-    return False
+    end_time = time.time()
+    time_taken = end_time - start_time
+    
+    # Final memory check
+    current_memory = get_memory_usage()
+    peak_memory = max(peak_memory, current_memory)
+    
+    return False, time_taken, peak_memory

@@ -104,8 +104,13 @@ def main():
         # Just check if the knowledge base is consistent (not self-contradictory)
         # To check consistency, we see if we can derive a contradiction
         knowledge_base.pop()  # Remove the last "&"
-        result = not resolve(knowledge_base.copy(), verbose)
-        if result:
+        result, time_taken, peak_memory = resolve(knowledge_base.copy(), verbose)
+        
+        print(f"{Fore.CYAN}Performance metrics:{Style.RESET_ALL}")
+        print(f"  {Fore.YELLOW}Execution time:{Style.RESET_ALL} {time_taken:.4f} seconds")
+        print(f"  {Fore.YELLOW}Peak memory usage:{Style.RESET_ALL} {peak_memory:.2f} MB")
+        
+        if not result:
             print(f"{Fore.GREEN}Knowledge base is consistent.{Style.RESET_ALL}")
             return 0
         else:
@@ -123,7 +128,12 @@ def main():
         query = to_cnf(segment_sentence("!("+query+")"))
     
         # Do the resolution refutation procedure
-        result = resolve(knowledge_base.copy() + query.copy(), verbose)
+        result, time_taken, peak_memory = resolve(knowledge_base.copy() + query.copy(), verbose)
+        
+        print(f"{Fore.CYAN}Performance metrics:{Style.RESET_ALL}")
+        print(f"  {Fore.YELLOW}Execution time:{Style.RESET_ALL} {time_taken:.4f} seconds")
+        print(f"  {Fore.YELLOW}Peak memory usage:{Style.RESET_ALL} {peak_memory:.2f} MB")
+        
         if result:
             print(f"{Fore.GREEN}Knowledge base entails the query.{Style.RESET_ALL}")
             return 0
