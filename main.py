@@ -100,7 +100,6 @@ def display_metrics(time_taken, peak_memory, stats):
     print(f"  {Fore.YELLOW}Initial clauses:{Style.RESET_ALL} {stats.get('initial_clauses', 0)}")
     print(f"  {Fore.YELLOW}Final clause count:{Style.RESET_ALL} {stats.get('final_clause_count', 0)}")
     print(f"  {Fore.YELLOW}Clause pairs examined:{Style.RESET_ALL} {stats.get('clause_pairs_examined', 0)}")
-    print(f"  {Fore.YELLOW}New clauses generated:{Style.RESET_ALL} {stats.get('clauses_generated', 0)}")
     
     # Calculate clauses per second if time is non-zero
     if time_taken > 0:
@@ -127,16 +126,20 @@ def main():
     if no_query:
         # Just check if the knowledge base is consistent (not self-contradictory)
         # To check consistency, we see if we can derive a contradiction
+        if not knowledge_base:
+            print(f"\n{Fore.GREEN}Knowledge base is satisfiable.{Style.RESET_ALL}")
+            return 0
+        
         knowledge_base.pop()  # Remove the last "&"
         result, time_taken, peak_memory, stats = resolve(knowledge_base.copy(), verbose)
         
         display_metrics(time_taken, peak_memory, stats)
         
         if not result:
-            print(f"\n{Fore.GREEN}Knowledge base is consistent.{Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}Knowledge base is satisfiable.{Style.RESET_ALL}")
             return 0
         else:
-            print(f"\n{Fore.RED}Knowledge base is inconsistent (self-contradictory).{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}Knowledge base is not satisfiable (self-contradictory).{Style.RESET_ALL}")
             return 1
     else:
         # Normal mode with a query
