@@ -6,6 +6,7 @@ Implements resolution refutation procedure for propositional logic formulas.
 import colorama
 from colorama import Fore, Style
 from parser import forward_slice
+from loading_indicator import LoadingIndicator
 import time
 import psutil
 import os
@@ -117,14 +118,28 @@ def resolve(sentence, mode):
         mode (bool): Whether to print resolution steps
     
     Returns:
-        tuple: (result, time_taken, peak_memory)
+        tuple: (result, time_taken, peak_memory, stats)
             - result (bool): True if the KB entails the query, False otherwise
             - time_taken (float): Time taken for resolution in seconds
             - peak_memory (float): Peak memory usage during resolution in MB
+            - stats (dict): Additional statistics about the resolution process
     """
     start_time = time.time()
     initial_memory = get_memory_usage()
     peak_memory = initial_memory
+    
+    # Initialize loading indicator if not in verbose mode
+    loading = None
+    if not mode:
+        loading = LoadingIndicator("Performing resolution")
+        loading.start()
+    
+    # Statistics tracking
+    stats = {
+        "steps": 0,
+        "clauses_generated": 0,
+        "clause_pairs_examined": 0
+    }
     
     # Convert to clause format
     clause = []
@@ -155,6 +170,7 @@ def resolve(sentence, mode):
             literals.add("!" + var if is_negated else var)
         clause_set.add(frozenset(literals))
 
+    stats["initial_clauses"] = len(clause_set)
     step_counter = 0
     prev_length = 0
 
@@ -170,20 +186,23 @@ def resolve(sentence, mode):
         for i in range(len(clause_list)):
             for j in range(i+1, len(clause_list)):
                 c1, c2 = clause_list[i], clause_list[j]
+                stats["clause_pairs_examined"] += 1
                 resolvent_pairs = resolve_clause_pair(c1, c2)
                 
                 # Process each resolvent
                 for resolvent, eliminated in resolvent_pairs:
                     if resolvent not in clause_set:
+                        stats["clauses_generated"] += 1
                         if mode:
                             step_counter += 1
+                            stats["steps"] = step_counter
                             print(f"  {Fore.YELLOW}Step {step_counter}:{Style.RESET_ALL} Resolving {Fore.MAGENTA}{format_clause(c1)}{Style.RESET_ALL} and {Fore.MAGENTA}{format_clause(c2)}{Style.RESET_ALL}")
                             print(f"    {Fore.BLUE}Derived:{Style.RESET_ALL} {Fore.GREEN}{format_clause(resolvent)}{Style.RESET_ALL}")
                             print(f"    {Fore.RED}(Eliminated: {eliminated}){Style.RESET_ALL}")
                         
                         new_resolvents.add(resolvent)
                         
-                        # Check for empty clause
+                        # Check for empty clause immediately
                         if len(resolvent) == 0:
                             if mode:
                                 print(f"{Fore.GREEN}Empty clause found! Contradiction achieved.{Style.RESET_ALL}")
@@ -195,7 +214,13 @@ def resolve(sentence, mode):
                             current_memory = get_memory_usage()
                             peak_memory = max(peak_memory, current_memory)
                             
-                            return True, time_taken, peak_memory
+                            # Stop loading indicator if it's running
+                            if loading:
+                                loading.stop()
+                            
+                            stats["final_clause_count"] = len(clause_set) + 1  # +1 for empty clause
+                            
+                            return True, time_taken, peak_memory, stats
                 
                 # Regular memory check during resolution
                 current_memory = get_memory_usage()
@@ -212,4 +237,11 @@ def resolve(sentence, mode):
     current_memory = get_memory_usage()
     peak_memory = max(peak_memory, current_memory)
     
-    return False, time_taken, peak_memory
+    # Stop loading indicator if it's running
+    if loading:
+        loading.stop()
+    
+    stats["steps"] = step_counter
+    stats["final_clause_count"] = len(clause_set)
+    
+    return False, time_taken, peak_memory, stats

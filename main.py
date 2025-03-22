@@ -83,6 +83,30 @@ def read_from_file(filename):
         sys.exit(1)
     return sentences
 
+def display_metrics(time_taken, peak_memory, stats):
+    """
+    Display performance metrics in a formatted way.
+    
+    Args:
+        time_taken (float): Execution time in seconds
+        peak_memory (float): Peak memory usage in MB
+        stats (dict): Additional statistics about the resolution process
+    """
+    print(f"\n{Fore.CYAN}Performance metrics:{Style.RESET_ALL}")
+    print(f"  {Fore.YELLOW}Execution time:{Style.RESET_ALL} {time_taken:.4f} seconds")
+    print(f"  {Fore.YELLOW}Peak memory usage:{Style.RESET_ALL} {peak_memory:.2f} MB")
+    
+    print(f"\n{Fore.CYAN}Resolution statistics:{Style.RESET_ALL}")
+    print(f"  {Fore.YELLOW}Initial clauses:{Style.RESET_ALL} {stats.get('initial_clauses', 0)}")
+    print(f"  {Fore.YELLOW}Final clause count:{Style.RESET_ALL} {stats.get('final_clause_count', 0)}")
+    print(f"  {Fore.YELLOW}Clause pairs examined:{Style.RESET_ALL} {stats.get('clause_pairs_examined', 0)}")
+    print(f"  {Fore.YELLOW}New clauses generated:{Style.RESET_ALL} {stats.get('clauses_generated', 0)}")
+    
+    # Calculate clauses per second if time is non-zero
+    if time_taken > 0:
+        clauses_per_second = stats.get('clauses_generated', 0) / time_taken
+        print(f"  {Fore.YELLOW}Clauses per second:{Style.RESET_ALL} {clauses_per_second:.2f}")
+
 def main():
     """
     Main function to run the propositional logic resolution prover.
@@ -104,17 +128,15 @@ def main():
         # Just check if the knowledge base is consistent (not self-contradictory)
         # To check consistency, we see if we can derive a contradiction
         knowledge_base.pop()  # Remove the last "&"
-        result, time_taken, peak_memory = resolve(knowledge_base.copy(), verbose)
+        result, time_taken, peak_memory, stats = resolve(knowledge_base.copy(), verbose)
         
-        print(f"{Fore.CYAN}Performance metrics:{Style.RESET_ALL}")
-        print(f"  {Fore.YELLOW}Execution time:{Style.RESET_ALL} {time_taken:.4f} seconds")
-        print(f"  {Fore.YELLOW}Peak memory usage:{Style.RESET_ALL} {peak_memory:.2f} MB")
+        display_metrics(time_taken, peak_memory, stats)
         
         if not result:
-            print(f"{Fore.GREEN}Knowledge base is consistent.{Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}Knowledge base is consistent.{Style.RESET_ALL}")
             return 0
         else:
-            print(f"{Fore.RED}Knowledge base is inconsistent (self-contradictory).{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}Knowledge base is inconsistent (self-contradictory).{Style.RESET_ALL}")
             return 1
     else:
         # Normal mode with a query
@@ -128,17 +150,15 @@ def main():
         query = to_cnf(segment_sentence("!("+query+")"))
     
         # Do the resolution refutation procedure
-        result, time_taken, peak_memory = resolve(knowledge_base.copy() + query.copy(), verbose)
+        result, time_taken, peak_memory, stats = resolve(knowledge_base.copy() + query.copy(), verbose)
         
-        print(f"{Fore.CYAN}Performance metrics:{Style.RESET_ALL}")
-        print(f"  {Fore.YELLOW}Execution time:{Style.RESET_ALL} {time_taken:.4f} seconds")
-        print(f"  {Fore.YELLOW}Peak memory usage:{Style.RESET_ALL} {peak_memory:.2f} MB")
+        display_metrics(time_taken, peak_memory, stats)
         
         if result:
-            print(f"{Fore.GREEN}Knowledge base entails the query.{Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}Knowledge base entails the query.{Style.RESET_ALL}")
             return 0
         else:
-            print(f"{Fore.RED}Knowledge base does not entail the query.{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}Knowledge base does not entail the query.{Style.RESET_ALL}")
             return 1
 
 if __name__ == "__main__":
