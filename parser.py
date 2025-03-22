@@ -3,8 +3,6 @@ Parser module for propositional logic resolution prover.
 Handles tokenization and parsing of propositional logic formulas.
 """
 
-import sys
-
 
 OPERATORS = ["!", "&", "|", ">", "=", "(", ")"]
 
