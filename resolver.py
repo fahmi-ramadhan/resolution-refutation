@@ -13,46 +13,35 @@ import os
 
 colorama.init(autoreset=True)
 
-def clause_map(sentence):
+def clause_to_frozenset(sentence):
     """
-    Creates a map where keys are literals in the sentence and values indicate
-    whether they are negated (True) or not (False).
+    Creates a frozenset from list of operators and literals in a clause.
     
     Args:
         sentence (list): Propositional formula in CNF
     
     Returns:
-        dict: Map of literals to their negation status
+        frozenset: immutable set of literals in the clause
     
     Note:
-        The sentence should be in CNF and of the form (A|B|...|Z)
+        The sentence should be in CNF and of the form ['(', 'A', '|', 'B', '|',...,'|', 'Z', ')']
         where literals like A, B, ..., Z can be negated.
+
+    Example:
+        ['(', 'A', '|', '!B', ')'] -> frozenset({'A', '!B'})
     """
-    m = {}
+    m = set()
     j = 1 if sentence[0] == "(" else 0
     L = len(sentence) - 1 if sentence[0] == "(" else len(sentence)
     while j < L:
         literal, j = forward_slice(sentence, j)
         if literal[0] == "!":
-            m[literal[1]] = True
+            m.add("!" + str(literal[1]))
         else:
-            m[literal[0]] = False
+            m.add(str(literal[0]))
         # [NOTE] 'j' is incremented by 2 to escape '|' and reach next literal.
         j += 2
-    return m
-
-
-def format_dict(dictionary):
-    """
-    Formats a clause dictionary for display.
-    
-    Args:
-        dictionary (dict): Map of literals to their negation status
-    
-    Returns:
-        str: Formatted string representation of the clause
-    """
-    return ", ".join([("!" if dictionary[key] else "") + str(key) for key in dictionary])
+    return frozenset(m)
 
 
 def format_clause(clause):
@@ -143,32 +132,26 @@ def resolve(sentence, mode):
     
     # Convert to clause format
     clause = []
-    clause_maps = []
+    # clause_set is a set of frozensets, where each frozenset represent a clause
+    clause_set = set()
 
-    # Process the sentence into clauses
+    # Process the sentence into clauses in frozenset form
     for literal in sentence:
         if literal == "&":
-            clause_maps.append(clause_map(clause))
+            clause_set.add(clause_to_frozenset(clause))
             clause.clear()
         else:
             clause.append(literal)
 
     # Add the last clause
-    clause_maps.append(clause_map(clause))
+    clause_set.add(clause_to_frozenset(clause))
 
     if mode:
         print(f"{Fore.CYAN}KB ∪ ¬Q:{Style.RESET_ALL}")
-        formatted_clauses = [f"{Fore.MAGENTA}[{format_dict(clause_dict)}]{Style.RESET_ALL}" for clause_dict in clause_maps]
+        formatted_clauses = [f"{Fore.MAGENTA}[{', '.join(clause)}]{Style.RESET_ALL}" for clause in clause_set]
         print(f"  {{{', '.join(formatted_clauses)}}}")
         print(f"\n{Fore.CYAN}Resolution steps:{Style.RESET_ALL}")
 
-    # Convert clause_maps to set of frozensets for easier handling
-    clause_set = set()
-    for cm in clause_maps:
-        literals = set()
-        for var, is_negated in cm.items():
-            literals.add("!" + var if is_negated else var)
-        clause_set.add(frozenset(literals))
 
     stats["initial_clauses"] = len(clause_set)
     step_counter = 0
@@ -191,8 +174,8 @@ def resolve(sentence, mode):
                 
                 # Process each resolvent
                 for resolvent, eliminated in resolvent_pairs:
+                    stats['clauses_generated'] += 1
                     if resolvent not in clause_set:
-                        stats["clauses_generated"] += 1
                         if mode:
                             step_counter += 1
                             stats["steps"] = step_counter
@@ -218,7 +201,7 @@ def resolve(sentence, mode):
                             if loading:
                                 loading.stop()
                             
-                            stats["final_clause_count"] = len(clause_set) + 1  # +1 for empty clause
+                            stats["final_clause_count"] = len(clause_set) + len(set(new_resolvents)) 
                             
                             return True, time_taken, peak_memory, stats
                 
