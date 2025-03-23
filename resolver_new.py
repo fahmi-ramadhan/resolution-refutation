@@ -1,61 +1,86 @@
+"""
+Enhanced resolver module for propositional logic resolution.
+
+This module implements an optimized resolution algorithm for propositional logic,
+featuring subsumption checking, more efficient clause management, and additional
+statistics tracking. It is designed to be used as an alternative to the original
+resolver implementation.
+"""
+
 import time
-import psutil
-import os
 from colorama import Fore, Style
-
-# Assuming these are unchanged
-from parser import forward_slice
 from loading_indicator import LoadingIndicator
-
-def clause_to_frozenset(sentence):
-    m = set()
-    j = 1 if sentence[0] == "(" else 0
-    L = len(sentence) - 1 if sentence[0] == "(" else len(sentence)
-    while j < L:
-        literal, j = forward_slice(sentence, j)
-        if literal[0] == "!":
-            m.add("!" + str(literal[1]))
-        else:
-            m.add(str(literal[0]))
-        j += 2
-    return frozenset(m)
-
-def format_clause(clause):
-    return "[" + ", ".join(sorted(clause)) + "]"
-
-def resolve_clause_pair(clause1, clause2):
-    resolvents = []
-    for literal in clause1:
-        neg_literal = literal[1:] if literal.startswith("!") else "!" + literal
-        if neg_literal in clause2:
-            new_clause = frozenset(clause1.difference({literal}).union(clause2.difference({neg_literal})))
-            eliminated_pair = f"{literal}/{neg_literal}"
-            resolvents.append((new_clause, eliminated_pair))
-    return resolvents
-
-def get_memory_usage():
-    process = psutil.Process(os.getpid())
-    memory_info = process.memory_info()
-    return memory_info.rss / (1024 * 1024)
+from resolver import clause_to_frozenset, format_clause, resolve_clause_pair, get_memory_usage
 
 def is_subsumed(new_clause, clause_set):
+    """
+    Check if a new clause is subsumed by any existing clause in the clause set.
+    
+    A clause C1 subsumes another clause C2 if C1 is a subset of C2. This means 
+    C1 is more general than C2, and we can safely ignore C2.
+    For later application, if the new clause is subsumed by any existing clause,
+    we can avoid adding the new clause to the clause set.
+    
+    Args:
+        new_clause (frozenset): The new clause to check for subsumption
+        clause_set (set): The set of existing clauses
+        
+    Returns:
+        bool: True if the new clause is subsumed by any existing clause, False otherwise
+    """
     return any(existing.issubset(new_clause) for existing in clause_set)
 
 def subsumes_any(new_clause, clause_set):
+    """
+    Find all clauses in the clause set that are subsumed by the new clause.
+    
+    For each existing clause in the clause set, check if the new clause is a subset
+    of the existing clause. If so, the new clause subsumes the existing clause, and those existing
+    clauses can be removed.
+
+    Args:
+        new_clause (frozenset): The new clause that may subsume others
+        clause_set (set): The set of existing clauses to check against
+        
+    Returns:
+        list: List of clauses that are subsumed by the new clause
+    """
     return [existing for existing in clause_set if new_clause.issubset(existing)]
 
 def resolve(sentence, mode):
+    """
+    Perform resolution on a set of propositional logic clauses.
+    
+    This enhanced resolver implements several optimizations:
+    1. Subsumption checking to eliminate redundant clauses
+    2. More efficient clause management with workset approach
+    3. Detailed statistics tracking
+    
+    Args:
+        sentence (list): List of literals and connectives in the knowledge base 
+                         and negated query
+        mode (bool): Whether to print detailed resolution steps
+    
+    Returns:
+        tuple: (result, time_taken, peak_memory, stats)
+            - result (bool): True if a contradiction was found (meaning entailment), 
+                            False otherwise
+            - time_taken (float): Execution time in seconds
+            - peak_memory (float): Peak memory usage in MB
+            - stats (dict): Dictionary containing resolution statistics
+    """
     start_time = time.time()
     initial_memory = get_memory_usage()
     peak_memory = initial_memory
 
+    # Initialize loading indicator if not in verbose mode
     loading = None
     if not mode:
         loading = LoadingIndicator("Performing resolution")
         loading.start()
 
+    # Statistics tracking
     stats = {
-        "steps": 0,
         "clauses_generated": 0,
         "clause_pairs_examined": 0,
         "subsumed_clauses_removed": 0
@@ -64,14 +89,19 @@ def resolve(sentence, mode):
     # Convert sentence to clause set
     clause_set = set()
     clause = []
+
+    # Process the sentence into clauses in frozenset form
     for literal in sentence:
         if literal == "&":
             clause_set.add(clause_to_frozenset(clause))
             clause.clear()
         else:
             clause.append(literal)
+    
+    # Add the last clause
     clause_set.add(clause_to_frozenset(clause))
 
+    # Display initial clauses in verbose mode
     if mode:
         print(f"{Fore.CYAN}KB ∪ ¬Q:{Style.RESET_ALL}")
         formatted_clauses = [f"{Fore.MAGENTA}[{', '.join(clause)}]{Style.RESET_ALL}" for clause in clause_set]
@@ -86,11 +116,13 @@ def resolve(sentence, mode):
         new_resolvents = set()
         clauses_to_remove = set()  # Track clauses to remove due to subsumption
 
+        #Try to resolve each clause in the worklist with all clauses in the main clause set/KB
         for c1 in worklist:
             for c2 in clause_set:
                 stats["clause_pairs_examined"] += 1
                 resolvent_pairs = resolve_clause_pair(c1, c2)
 
+                # Process each resolvent
                 for resolvent, eliminated in resolvent_pairs:
                     stats["clauses_generated"] += 1
 
@@ -102,49 +134,58 @@ def resolve(sentence, mode):
 
                         new_resolvents.add(resolvent)
 
+                        # Display resolution step in verbose mode
                         if mode:
                             step_counter += 1
-                            stats["steps"] = step_counter
                             print(f"  {Fore.YELLOW}Step {step_counter}:{Style.RESET_ALL} Resolving {Fore.MAGENTA}{format_clause(c1)}{Style.RESET_ALL} and {Fore.MAGENTA}{format_clause(c2)}{Style.RESET_ALL}")
                             print(f"    {Fore.BLUE}Derived:{Style.RESET_ALL} {Fore.GREEN}{format_clause(resolvent)}{Style.RESET_ALL}")
                             print(f"    {Fore.RED}(Eliminated: {eliminated}){Style.RESET_ALL}")
                             if subsumed:
-                                print(f"    {Fore.CYAN}(Removed subsumed: {', '.join(format_clause(s) for s in subsumed)}){Style.RESET_ALL}")
+                                print(f"    {Fore.CYAN}(Clauses subsumed: {', '.join(format_clause(s) for s in subsumed)}){Style.RESET_ALL}")
 
+                        # Check for empty clause immediately
                         if len(resolvent) == 0:
                             if mode:
                                 print(f"{Fore.GREEN}Empty clause found! Contradiction achieved.{Style.RESET_ALL}")
+
                             end_time = time.time()
                             time_taken = end_time - start_time
+
+                            # Final memory check
                             peak_memory = max(peak_memory, get_memory_usage())
+
+                            # Stop loading indicator if it's running
                             if loading:
                                 loading.stop()
-                            stats["final_clause_count"] = len(clause_set) + len(new_resolvents) - len(clauses_to_remove)
+
+                            stats["final_clause_count"] = len(clause_set) + len(new_resolvents)
+
                             return True, time_taken, peak_memory, stats
 
-        # Apply updates after iteration
+        # Remove subsumed clauses and update the clause set
         clause_set.difference_update(clauses_to_remove)
         stats["subsumed_clauses_removed"] += len(clauses_to_remove)
         clause_set.update(new_resolvents)
-        worklist = new_resolvents
+        worklist = new_resolvents  # Only process new resolvents in the next iteration
 
+        # Track peak memory usage during resolution
         peak_memory = max(peak_memory, get_memory_usage())
 
+        # If no new resolvents were generated, we've reached a fixed point
         if not new_resolvents:
             break
 
+    # If we get here without finding an empty clause, the KB doesn't entail the query
     end_time = time.time()
     time_taken = end_time - start_time
+
+    # Final memory check
     peak_memory = max(peak_memory, get_memory_usage())
+
+    # Stop loading indicator if it's running
     if loading:
         loading.stop()
+
     stats["final_clause_count"] = len(clause_set)
 
     return False, time_taken, peak_memory, stats
-
-# # Example usage
-# if __name__ == "__main__":
-#     sentence = ["(", "A", ")", "&", "(", "!A", "|", "B", ")", "&", "(", "!B", ")"]
-#     result, time_taken, peak_memory, stats = resolve(sentence, mode=True)
-#     print(f"\nResult: {result}, Time: {time_taken:.3f}s, Peak Memory: {peak_memory:.2f}MB")
-#     print(f"Stats: {stats}")
