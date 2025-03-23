@@ -1,0 +1,736 @@
+if we modify q2.txt content to A1 > (B2 & C1 & D1)
+kb2 will not entail q2
+
+python main.py datasets/kb1.txt datasets/q2.txt -v
+Using default resolver implementation
+KB ∪ ¬Q:
+  {[Boy, !Child, Girl], [!FirstGrade, Child], [!Boy, Child], [!D1, !C1, !B2], [FirstGrade], [Boy, Girl], [A1], [!Female, !Child, Girl], [Female], [!Girl, Child]}
+
+Resolution steps:
+  Step 1: Resolving [!Child, Boy, Girl] and [!FirstGrade, Child]
+    Derived: [!FirstGrade, Boy, Girl]
+    (Eliminated: !Child/Child)
+  Step 2: Resolving [!Child, Boy, Girl] and [!Boy, Child]
+    Derived: [!Child, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 3: Resolving [!Child, Boy, Girl] and [!Boy, Child]
+    Derived: [!Boy, Boy, Girl]
+    (Eliminated: !Child/Child)
+  Step 4: Resolving [!Child, Boy, Girl] and [!Girl, Child]
+    Derived: [!Girl, Boy, Girl]
+    (Eliminated: !Child/Child)
+  Step 5: Resolving [!Child, Boy, Girl] and [!Girl, Child]
+    Derived: [!Child, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 6: Resolving [!FirstGrade, Child] and [FirstGrade]
+    Derived: [Child]
+    (Eliminated: !FirstGrade/FirstGrade)
+  Step 7: Resolving [!FirstGrade, Child] and [!Child, !Female, Girl]
+    Derived: [!Female, !FirstGrade, Girl]
+    (Eliminated: Child/!Child)
+  Step 8: Resolving [!Boy, Child] and [Boy, Girl]
+    Derived: [Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 9: Resolving [!Boy, Child] and [!Child, !Female, Girl]
+    Derived: [!Boy, !Female, Girl]
+    (Eliminated: Child/!Child)
+  Step 10: Resolving [Boy, Girl] and [!Girl, Child]
+    Derived: [Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 11: Resolving [!Child, !Female, Girl] and [Female]
+    Derived: [!Child, Girl]
+    (Eliminated: !Female/Female)
+  Step 12: Resolving [!Child, !Female, Girl] and [!Girl, Child]
+    Derived: [!Female, !Girl, Girl]
+    (Eliminated: !Child/Child)
+  Step 13: Resolving [!Child, !Female, Girl] and [!Girl, Child]
+    Derived: [!Child, !Female, Child]
+    (Eliminated: Girl/!Girl)
+  Step 14: Resolving [Child, Girl] and [!Girl, Boy, Girl]
+    Derived: [Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 15: Resolving [Child, Girl] and [!Child, !Female, Child]
+    Derived: [!Female, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 16: Resolving [Child, Girl] and [!Child, Girl]
+    Derived: [Girl]
+    (Eliminated: Child/!Child)
+  Step 17: Resolving [Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 18: Resolving [Child, Girl] and [!Child, Boy, Child]
+    Derived: [Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 19: Resolving [Child, Girl] and [!Child, !Female, Girl]
+    Derived: [!Female, Girl]
+    (Eliminated: Child/!Child)
+  Step 20: Resolving [!Child, Child, Girl] and [!Girl, Boy, Girl]
+    Derived: [!Child, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 21: Resolving [!Child, Child, Girl] and [!Boy, Child]
+    Derived: [!Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 22: Resolving [!Child, Child, Girl] and [!Child, !Female, Child]
+    Derived: [!Child, !Female, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 23: Resolving [!Child, Child, Girl] and [!Child, !Female, Child]
+    Derived: [!Child, !Female, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 24: Resolving [!Child, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Child, !Female, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 25: Resolving [!Child, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!Child, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 26: Resolving [!Child, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!Child, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 27: Resolving [!Child, Child, Girl] and [Boy, Child]
+    Derived: [Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 28: Resolving [!Child, Child, Girl] and [!FirstGrade, Child]
+    Derived: [!FirstGrade, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 29: Resolving [!Child, Child, Girl] and [!Girl, Child]
+    Derived: [!Girl, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 30: Resolving [!Child, Child, Girl] and [!Girl, Child]
+    Derived: [!Child, Child]
+    (Eliminated: Girl/!Girl)
+  Step 31: Resolving [!Girl, Boy, Girl] and [!Boy, Child]
+    Derived: [!Girl, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 32: Resolving [!Girl, Boy, Girl] and [!Boy, !Female, Girl]
+    Derived: [!Boy, !Female, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 33: Resolving [!Girl, Boy, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, !Girl, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 34: Resolving [!Girl, Boy, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, !Girl, Boy, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 35: Resolving [!Girl, Boy, Girl] and [!Female, !FirstGrade, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 36: Resolving [!Girl, Boy, Girl] and [!Child, !Female, Girl]
+    Derived: [!Child, !Female, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 37: Resolving [!Girl, Boy, Girl] and [!Girl, Child]
+    Derived: [!Girl, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 38: Resolving [!Boy, Child] and [!Child, !Female, Child]
+    Derived: [!Boy, !Female, Child]
+    (Eliminated: Child/!Child)
+  Step 39: Resolving [!Boy, Child] and [!Child, Girl]
+    Derived: [!Boy, Girl]
+    (Eliminated: Child/!Child)
+  Step 40: Resolving [!Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 41: Resolving [!Boy, Child] and [!Child, Boy, Child]
+    Derived: [!Child, Child]
+    (Eliminated: !Boy/Boy)
+  Step 42: Resolving [!Boy, Child] and [!Child, Boy, Child]
+    Derived: [!Boy, Boy, Child]
+    (Eliminated: Child/!Child)
+  Step 43: Resolving [!Boy, Child] and [!FirstGrade, Boy, Girl]
+    Derived: [!FirstGrade, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 44: Resolving [!Child, !Female, Child] and [!Child, Boy, Child]
+    Derived: [!Child, !Female, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 45: Resolving [!Child, !Female, Child] and [!Child, Boy, Child]
+    Derived: [!Child, !Female, Boy, Child]
+    (Eliminated: Child/!Child)
+  Step 46: Resolving [!Child, !Female, Child] and [Boy, Child]
+    Derived: [!Female, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 47: Resolving [!Child, !Female, Child] and [!Child, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Girl]
+    (Eliminated: Child/!Child)
+  Step 48: Resolving [!Child, !Female, Child] and [!FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Child]
+    (Eliminated: !Child/Child)
+  Step 49: Resolving [!Child, !Female, Child] and [Child]
+    Derived: [!Female, Child]
+    (Eliminated: !Child/Child)
+  Step 50: Resolving [!Child, !Female, Child] and [Female]
+    Derived: [!Child, Child]
+    (Eliminated: !Female/Female)
+  Step 51: Resolving [!Child, !Female, Child] and [!Girl, Child]
+    Derived: [!Female, !Girl, Child]
+    (Eliminated: !Child/Child)
+  Step 52: Resolving [FirstGrade] and [!Female, !FirstGrade, Girl]
+    Derived: [!Female, Girl]
+    (Eliminated: FirstGrade/!FirstGrade)
+  Step 53: Resolving [Boy, Girl] and [!Boy, !Female, Girl]
+    Derived: [!Female, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 54: Resolving [Boy, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, Boy, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 55: Resolving [!Boy, !Female, Girl] and [!Child, Boy, Child]
+    Derived: [!Child, !Female, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 56: Resolving [!Boy, !Female, Girl] and [Boy, Child]
+    Derived: [!Female, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 57: Resolving [!Boy, !Female, Girl] and [Female]
+    Derived: [!Boy, Girl]
+    (Eliminated: !Female/Female)
+  Step 58: Resolving [!Boy, !Female, Girl] and [!Girl, Child]
+    Derived: [!Boy, !Female, Child]
+    (Eliminated: Girl/!Girl)
+  Step 59: Resolving [!Child, Girl] and [!FirstGrade, Child]
+    Derived: [!FirstGrade, Girl]
+    (Eliminated: !Child/Child)
+  Step 60: Resolving [!Child, Girl] and [Child]
+    Derived: [Girl]
+    (Eliminated: !Child/Child)
+  Step 61: Resolving [!Child, Girl] and [!Girl, Child]
+    Derived: [!Girl, Girl]
+    (Eliminated: !Child/Child)
+  Step 62: Resolving [!Child, Girl] and [!Girl, Child]
+    Derived: [!Child, Child]
+    (Eliminated: Girl/!Girl)
+  Step 63: Resolving [!Boy, Boy, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Boy, !Female, Boy, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 64: Resolving [!Boy, Boy, Girl] and [!Child, Boy, Child]
+    Derived: [!Child, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 65: Resolving [!Boy, Boy, Girl] and [Boy, Child]
+    Derived: [Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 66: Resolving [!Boy, Boy, Girl] and [!Girl, Child]
+    Derived: [!Boy, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 67: Resolving [!Female, !Girl, Girl] and [!FirstGrade, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 68: Resolving [!Female, !Girl, Girl] and [!Child, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 69: Resolving [!Female, !Girl, Girl] and [Female]
+    Derived: [!Girl, Girl]
+    (Eliminated: !Female/Female)
+  Step 70: Resolving [!Female, !Girl, Girl] and [!Girl, Child]
+    Derived: [!Female, !Girl, Child]
+    (Eliminated: Girl/!Girl)
+  Step 71: Resolving [!Child, Boy, Child] and [!FirstGrade, Child]
+    Derived: [!FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 72: Resolving [!Child, Boy, Child] and [!Child, !Female, Girl]
+    Derived: [!Child, !Female, Boy, Girl]
+    (Eliminated: Child/!Child)
+  Step 73: Resolving [!Child, Boy, Child] and [!Girl, Child]
+    Derived: [!Girl, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 74: Resolving [Boy, Child] and [!Child, !Female, Girl]
+    Derived: [!Female, Boy, Girl]
+    (Eliminated: Child/!Child)
+  Step 75: Resolving [!FirstGrade, Boy, Girl] and [!Girl, Child]
+    Derived: [!FirstGrade, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 76: Resolving [Child] and [!Child, !Female, Girl]
+    Derived: [!Female, Girl]
+    (Eliminated: Child/!Child)
+  Step 77: Resolving [!Female, !FirstGrade, Girl] and [Female]
+    Derived: [!FirstGrade, Girl]
+    (Eliminated: !Female/Female)
+  Step 78: Resolving [!Female, !FirstGrade, Girl] and [!Girl, Child]
+    Derived: [!Female, !FirstGrade, Child]
+    (Eliminated: Girl/!Girl)
+  Step 79: Resolving [Child, Girl] and [!Child, !Female, Boy, Child]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 80: Resolving [Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 81: Resolving [!Boy, Boy, Child] and [!Girl, Boy, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 82: Resolving [!Boy, Boy, Child] and [!Child, !Female, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: Child/!Child)
+  Step 83: Resolving [!Boy, Boy, Child] and [!Boy, !Female, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 84: Resolving [!Boy, Boy, Child] and [!Child, Boy, Child, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 85: Resolving [!Boy, Boy, Child] and [!Child, !Female, Boy, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: Child/!Child)
+  Step 86: Resolving [!Boy, Boy, Child] and [!FirstGrade, Boy, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 87: Resolving [!Boy, Boy, Child] and [!Female, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 88: Resolving [!Boy, Boy, Child] and [!Female, !FirstGrade, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 89: Resolving [!Boy, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 90: Resolving [!Boy, Boy, Child] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 91: Resolving [!Boy, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 92: Resolving [!Boy, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 93: Resolving [!Boy, Boy, Child] and [!Child, !Female, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 94: Resolving [!Boy, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 95: Resolving [!Boy, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 96: Resolving [!Boy, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 97: Resolving [!Girl, Boy, Girl] and [!Female, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 98: Resolving [!Girl, Boy, Girl] and [!Girl, Child, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 99: Resolving [!Girl, Boy, Girl] and [!Girl, Child, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 100: Resolving [!Girl, Boy, Girl] and [!FirstGrade, Child, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 101: Resolving [!Girl, Boy, Girl] and [!Female, !Girl, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 102: Resolving [!Girl, Boy, Girl] and [!Boy, Child, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 103: Resolving [!Girl, Boy, Girl] and [!Boy, !Female, Child]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 104: Resolving [!Girl, Boy, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 105: Resolving [!Child, !Female, Child] and [!Child, Boy, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 106: Resolving [!Child, !Female, Child] and [!Child, Boy, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 107: Resolving [!Child, !Female, Child] and [!Girl, Child, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 108: Resolving [!Child, !Female, Child] and [!FirstGrade, Child, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 109: Resolving [!Child, !Female, Child] and [!FirstGrade, Boy, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 110: Resolving [!Child, !Female, Child] and [!Girl, Boy, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 111: Resolving [!Child, !Female, Child] and [!Boy, Child, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 112: Resolving [!Child, !Female, Child] and [Boy, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 113: Resolving [!Female, Boy, Child] and [!Child, Boy, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 114: Resolving [!Female, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 115: Resolving [!Female, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 116: Resolving [!Female, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 117: Resolving [!Female, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 118: Resolving [!Boy, !Female, Girl] and [!Girl, Child, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 119: Resolving [!Boy, !Female, Girl] and [!FirstGrade, Boy, Child]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 120: Resolving [!Boy, !Female, Girl] and [!Girl, Boy, Child]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 121: Resolving [!Boy, !Female, Girl] and [!Girl, Boy, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 122: Resolving [!Female, Child, Girl] and [!Child, Boy, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 123: Resolving [!Female, Child, Girl] and [!Child, !Female, Boy, Child]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 124: Resolving [!Female, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 125: Resolving [!Female, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 126: Resolving [!Child, Boy, Child, Girl] and [!Child, !Female, Boy, Child]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 127: Resolving [!Child, Boy, Child, Girl] and [!Child, !Female, Boy, Child]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 128: Resolving [!Child, Boy, Child, Girl] and [!Girl, Child, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 129: Resolving [!Child, Boy, Child, Girl] and [!FirstGrade, Child, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 130: Resolving [!Child, Boy, Child, Girl] and [!Female, !Girl, Child]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 131: Resolving [!Child, Boy, Child, Girl] and [!FirstGrade, Boy, Child]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 132: Resolving [!Child, Boy, Child, Girl] and [!Girl, Boy, Child]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 133: Resolving [!Child, Boy, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 134: Resolving [!Child, Boy, Child, Girl] and [!Female, Child]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 135: Resolving [!Child, Boy, Child, Girl] and [!Boy, Child]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 136: Resolving [!Child, Boy, Child, Girl] and [!Boy, Child, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 137: Resolving [!Child, Boy, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 138: Resolving [!Child, Boy, Child, Girl] and [!Boy, !Female, Child]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 139: Resolving [!Child, Boy, Child, Girl] and [!Female, !FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 140: Resolving [!Child, Boy, Child, Girl] and [!FirstGrade, Child]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 141: Resolving [!Child, Boy, Child, Girl] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 142: Resolving [!Child, Boy, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 143: Resolving [!Child, Boy, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 144: Resolving [!Child, Boy, Child, Girl] and [!Girl, Child]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 145: Resolving [Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 146: Resolving [Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 147: Resolving [!Child, !Female, Boy, Child] and [!Girl, Child, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 148: Resolving [!Child, !Female, Boy, Child] and [!FirstGrade, Child, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 149: Resolving [!Child, !Female, Boy, Child] and [!Female, !Girl, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 150: Resolving [!Child, !Female, Boy, Child] and [!FirstGrade, Boy, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 151: Resolving [!Child, !Female, Boy, Child] and [!Girl, Boy, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 152: Resolving [!Child, !Female, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 153: Resolving [!Child, !Female, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 154: Resolving [!Child, !Female, Boy, Child] and [!Boy, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 155: Resolving [!Child, !Female, Boy, Child] and [!Boy, Child, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 156: Resolving [!Child, !Female, Boy, Child] and [Boy, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 157: Resolving [!Child, !Female, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 158: Resolving [!Child, !Female, Boy, Child] and [!Boy, !Female, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 159: Resolving [!Child, !Female, Boy, Child] and [!Female, !FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 160: Resolving [!Child, !Female, Boy, Child] and [!FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 161: Resolving [!Child, !Female, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 162: Resolving [!Child, !Female, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 163: Resolving [!Child, !Female, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 164: Resolving [!Child, !Female, Boy, Child] and [!Girl, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 165: Resolving [!Girl, Child, Girl] and [!FirstGrade, Boy, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 166: Resolving [!Girl, Child, Girl] and [!Female, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 167: Resolving [!Girl, Child, Girl] and [!Female, !FirstGrade, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 168: Resolving [!Girl, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 169: Resolving [!Girl, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 170: Resolving [!Girl, Child, Girl] and [!Boy, Boy, Girl]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 171: Resolving [!Girl, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 172: Resolving [!Girl, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 173: Resolving [!Girl, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 174: Resolving [!Girl, Child, Girl] and [!Child, !Female, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 175: Resolving [!Girl, Child, Girl] and [!Female, !FirstGrade, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 176: Resolving [!Girl, Child, Girl] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 177: Resolving [!Girl, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 178: Resolving [!FirstGrade, Boy, Girl] and [!Female, !Girl, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 179: Resolving [!FirstGrade, Boy, Girl] and [!Boy, !Female, Child]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 180: Resolving [!FirstGrade, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 181: Resolving [!FirstGrade, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 182: Resolving [!FirstGrade, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 183: Resolving [!FirstGrade, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 184: Resolving [!Female, !Girl, Child] and [!Female, !FirstGrade, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 185: Resolving [!Female, !Girl, Child] and [!Child, Child, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 186: Resolving [!Female, !Girl, Child] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 187: Resolving [!Female, !Girl, Child] and [!Boy, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 188: Resolving [!Female, !Girl, Child] and [!Child, Boy, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: Child/!Child)
+  Step 189: Resolving [!Female, !Girl, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 190: Resolving [!Female, !Girl, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 191: Resolving [!Female, !FirstGrade, Boy, Girl] and [!Girl, Boy, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 192: Resolving [!Female, !FirstGrade, Boy, Girl] and [!Boy, Child]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 193: Resolving [!Female, !FirstGrade, Boy, Girl] and [!Boy, Child, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 194: Resolving [!Female, !FirstGrade, Boy, Girl] and [!Boy, !Female, Child]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 195: Resolving [!Female, !FirstGrade, Boy, Girl] and [!Girl, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 196: Resolving [!FirstGrade, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 197: Resolving [!FirstGrade, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!FirstGrade, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 198: Resolving [!FirstGrade, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 199: Resolving [!FirstGrade, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 200: Resolving [!Girl, Boy, Child] and [!Child, Child, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 201: Resolving [!Girl, Boy, Child] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 202: Resolving [!Girl, Boy, Child] and [!Boy, Boy, Girl]
+    Derived: [!Girl, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 203: Resolving [!Girl, Boy, Child] and [!Female, !Girl, Girl]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 204: Resolving [!Girl, Boy, Child] and [!Female, !FirstGrade, Girl]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 205: Resolving [!Girl, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Girl/Girl)
+  Step 206: Resolving [!Girl, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 207: Resolving [!Girl, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !Girl, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 208: Resolving [!Child, Child, Girl] and [!Female, !Girl, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 209: Resolving [!Child, Child, Girl] and [!Boy, !Female, Child]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 210: Resolving [!Child, Child, Girl] and [!Female, !FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 211: Resolving [!Female, !Girl, Boy, Girl] and [!Boy, Child]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 212: Resolving [!Female, !Girl, Boy, Girl] and [!Boy, Child, Girl]
+    Derived: [!Boy, !Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 213: Resolving [!Female, !Girl, Boy, Girl] and [!Boy, Child, Girl]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 214: Resolving [!Female, !Girl, Boy, Girl] and [Boy, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 215: Resolving [!Female, !Girl, Boy, Girl] and [!Boy, !Female, Child]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 216: Resolving [!Female, !Girl, Boy, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Girl/Girl)
+  Step 217: Resolving [!Female, !Girl, Boy, Girl] and [!Girl, Child]
+    Derived: [!Female, !Girl, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 218: Resolving [!Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 219: Resolving [!Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 220: Resolving [!Boy, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 221: Resolving [!Boy, Child, Girl] and [!Child, Boy, Child]
+    Derived: [!Boy, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 222: Resolving [!Boy, Child, Girl] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 223: Resolving [!Boy, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 224: Resolving [Boy, Child, Girl] and [!Female, !Girl, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Girl/!Girl)
+  Step 225: Resolving [Boy, Child, Girl] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 226: Resolving [Boy, Child, Girl] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 227: Resolving [!Boy, Boy, Girl] and [!Boy, !Female, Child]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 228: Resolving [!Child, Boy, Child] and [!Boy, !Female, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 229: Resolving [!Child, Boy, Child] and [!Female, !FirstGrade, Child]
+    Derived: [!Female, !FirstGrade, Boy, Child]
+    (Eliminated: !Child/Child)
+  Step 230: Resolving [!Child, Boy, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Boy/!Boy)
+  Step 231: Resolving [!Child, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: !Child/Child)
+  Step 232: Resolving [!Child, Boy, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Child, !Female, Boy, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 233: Resolving [!Boy, !Female, Child] and [!Boy, !Female, Boy, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: !Boy/Boy)
+  Step 234: Resolving [!Boy, !Female, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Boy, !Female, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 235: Resolving [!Female, !FirstGrade, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 236: Resolving [!FirstGrade, Child] and [!Child, !Female, Child, Girl]
+    Derived: [!Female, !FirstGrade, Child, Girl]
+    (Eliminated: Child/!Child)
+  Step 237: Resolving [!Boy, !Female, Boy, Girl] and [!Girl, Child]
+    Derived: [!Boy, !Female, Boy, Child]
+    (Eliminated: Girl/!Girl)
+  Step 238: Resolving [!Child, !Female, Child, Girl] and [!Girl, Child]
+    Derived: [!Female, !Girl, Child, Girl]
+    (Eliminated: !Child/Child)
+
+Performance metrics:
+  Execution time: 0.0934 seconds
+  Peak memory usage: 16.90 MB
+
+Resolution statistics:
+  Initial clauses: 10
+  Final clause count: 64
+  Clause pairs examined: 3539
+  Clauses per second: 22987.77
+
+Knowledge base does not entail the query.
+PS D:\Semester 6\RPP\resolution-refutation> 
