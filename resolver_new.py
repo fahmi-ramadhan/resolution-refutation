@@ -73,6 +73,10 @@ def resolve(sentence, mode):
     initial_memory = get_memory_usage()
     peak_memory = initial_memory
 
+    # Memory check frequency control - check every N iterations
+    memory_check_frequency = 1000
+    iteration_counter = 0
+
     # Initialize loading indicator if not in verbose mode
     loading = None
     if not mode:
@@ -114,6 +118,13 @@ def resolve(sentence, mode):
     while worklist:
         new_resolvents = set()
         clauses_to_remove = set()  # Track clauses to remove due to subsumption
+
+        # Check memory usage only at the start of each main iteration
+        if iteration_counter % memory_check_frequency == 0:
+            current_memory = get_memory_usage()
+            peak_memory = max(peak_memory, current_memory)
+        
+        iteration_counter += 1
 
         #Try to resolve each clause in the worklist with all clauses in the main clause set/KB
         for c1 in worklist:
@@ -165,9 +176,6 @@ def resolve(sentence, mode):
         clause_set.difference_update(clauses_to_remove)
         clause_set.update(new_resolvents)
         worklist = new_resolvents  # Only process new resolvents in the next iteration
-
-        # Track peak memory usage during resolution
-        peak_memory = max(peak_memory, get_memory_usage())
 
         # If no new resolvents were generated, we've reached a fixed point
         if not new_resolvents:
