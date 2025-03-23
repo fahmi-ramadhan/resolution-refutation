@@ -125,7 +125,6 @@ def resolve(sentence, mode):
     
     # Statistics tracking
     stats = {
-        "steps": 0,
         "clauses_generated": 0,
         "clause_pairs_examined": 0
     }
@@ -178,7 +177,6 @@ def resolve(sentence, mode):
                     if resolvent not in clause_set:
                         if mode:
                             step_counter += 1
-                            stats["steps"] = step_counter
                             print(f"  {Fore.YELLOW}Step {step_counter}:{Style.RESET_ALL} Resolving {Fore.MAGENTA}{format_clause(c1)}{Style.RESET_ALL} and {Fore.MAGENTA}{format_clause(c2)}{Style.RESET_ALL}")
                             print(f"    {Fore.BLUE}Derived:{Style.RESET_ALL} {Fore.GREEN}{format_clause(resolvent)}{Style.RESET_ALL}")
                             print(f"    {Fore.RED}(Eliminated: {eliminated}){Style.RESET_ALL}")
@@ -201,7 +199,7 @@ def resolve(sentence, mode):
                             if loading:
                                 loading.stop()
                             
-                            stats["final_clause_count"] = len(clause_set) + len(set(new_resolvents)) 
+                            stats["final_clause_count"] = len(clause_set) + len(new_resolvents)
                             
                             return True, time_taken, peak_memory, stats
                 
@@ -224,7 +222,6 @@ def resolve(sentence, mode):
     if loading:
         loading.stop()
     
-    stats["steps"] = step_counter
     stats["final_clause_count"] = len(clause_set)
     
     return False, time_taken, peak_memory, stats
