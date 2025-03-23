@@ -1,6 +1,9 @@
+# Facts
 FirstGrade
-FirstGrade > Child
-Child & Male > Boy
-Kindergarten > Child
-Child & Female > Girl
 Female
+
+# Rules
+FirstGrade > Child
+Child & Female > Girl
+Boy | Girl = Child
+!Boy > Girl
