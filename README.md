@@ -10,6 +10,7 @@ This project implements a propositional logic resolution prover. It includes mod
 - `parser.py`: Contains functions for tokenizing and parsing propositional logic formulas.
 - `cnf_converter.py`: Converts propositional logic formulas to Conjunctive Normal Form (CNF).
 - `resolver.py`: Implements the resolution-based theorem proving for propositional logic.
+- `resolver_new.py` : Implements the improved resolution-based theorem proving for propositional logic.
 - `test.py`: Contains unit tests for the parser, CNF converter, and resolver modules.
 - `datasets/`: Contains knowledge base and query files.
 - `loading_indicator.py`: A simple loading indicator for the command-line interface.
@@ -21,10 +22,13 @@ This project implements a propositional logic resolution prover. It includes mod
 To run the resolution prover, use the following command:
 
 ```sh
-# Run with knowledge base and query files
+# Run with knowledge base and query files using default resolver
 python main.py <kb_file> <query_file> [-v]
 
-# Run only with knowledge base to check for consistency
+# Run with knowledge base and query files using improved resolver
+python main.py <kb_file> <query_file> [-v] [--resolver new]
+
+# Run only with knowledge base to check for knowledge base satisfiability
 python main.py <kb_file> --no-query [-v]
 ```
 
