@@ -83,7 +83,6 @@ def resolve(sentence, mode):
     stats = {
         "clauses_generated": 0,
         "clause_pairs_examined": 0,
-        "subsumed_clauses_removed": 0
     }
 
     # Convert sentence to clause set
@@ -164,7 +163,6 @@ def resolve(sentence, mode):
 
         # Remove subsumed clauses and update the clause set
         clause_set.difference_update(clauses_to_remove)
-        stats["subsumed_clauses_removed"] += len(clauses_to_remove)
         clause_set.update(new_resolvents)
         worklist = new_resolvents  # Only process new resolvents in the next iteration
 
