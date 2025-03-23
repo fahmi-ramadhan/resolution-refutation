@@ -1,6 +1,10 @@
 """
 Parser module for propositional logic resolution prover.
 Handles tokenization and parsing of propositional logic formulas.
+
+* The following code is adapted from propositional-logic-theorem-prover-using-resolution-refutation
+* Original author: Chakshu Gupta (ChakshuGupta13)
+* Source: https://github.com/ChakshuGupta13/propositional-logic-theorem-prover-using-resolution-refutation
 """
 
 

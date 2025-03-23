@@ -1,6 +1,10 @@
 """
 CNF Converter module for propositional logic resolution prover.
 Converts propositional logic formulas to Conjunctive Normal Form (CNF).
+
+* The following code is adapted from propositional-logic-theorem-prover-using-resolution-refutation
+* Original author: Chakshu Gupta (ChakshuGupta13)
+* Source: https://github.com/ChakshuGupta13/propositional-logic-theorem-prover-using-resolution-refutation
 """
 
 from parser import forward_slice, backward_slice
