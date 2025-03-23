@@ -9,40 +9,39 @@ import sys
 from colorama import Fore, Style
 from parser import segment_sentence
 from cnf_converter import to_cnf
-#uncomment the version you want to use
-#from resolver import resolve
-from resolver_new import resolve
-
 
 def parse_arguments():
     """
     Parses command-line arguments.
     
     Returns:
-        tuple: (kb_file, query_file, verbose, no_query)
+        tuple: (kb_file, query_file, verbose, no_query, resolver_type)
     """
     parser = argparse.ArgumentParser(
         description='Propositional Logic Resolution Prover',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python main.py kb.txt query.txt       # Run resolution without verbose output
-  python main.py kb.txt query.txt -v    # Run resolution with verbose output
-  python main.py kb.txt --no-query      # Run only knowledge base check without query
+  python main.py kb.txt query.txt                # Run resolution with default resolver
+  python main.py kb.txt query.txt -v             # Run resolution with verbose output
+  python main.py kb.txt query.txt --resolver new # Use the new resolver implementation
+  python main.py kb.txt --no-query               # Run only knowledge base check without query
   
 File format:
   - Each line in the files should contain a propositional logic formula
   - Supported operators: ! (not), & (and), | (or), > (implies), = (if and only if)
-  - Lines starting with # are treated as comments and ignored
+  - Lines starting with # in kb_file are treated as comments and ignored
   - The first line in the query file is used as the query
         """
     )
     parser.add_argument('kb_file', help='Path to the knowledge base file')
     parser.add_argument('query_file', nargs='?', help='Path to the query file')
     parser.add_argument('-v', '--verbose', action='store_true', 
-                        help='Print resolution steps')
+                        help='print resolution steps')
     parser.add_argument('--no-query', action='store_true',
-                        help='Run only knowledge base check without query')
+                        help='run only knowledge base satisfiability check without query')
+    parser.add_argument('--resolver', choices=['new'], default='default',
+                        help='use the new(improved) resolver implementation')
     
     args = parser.parse_args()
     
@@ -54,7 +53,7 @@ File format:
     if not args.no_query and not args.query_file:
         parser.error("Either query_file or --no-query must be provided")
     
-    return args.kb_file, args.query_file, args.verbose, args.no_query
+    return args.kb_file, args.query_file, args.verbose, args.no_query, args.resolver
 
 def read_from_file(filename):
     """
@@ -108,6 +107,27 @@ def display_metrics(time_taken, peak_memory, stats):
         clauses_per_second = stats.get('clauses_generated', 0) / time_taken
         print(f"  {Fore.YELLOW}Clauses per second:{Style.RESET_ALL} {clauses_per_second:.2f}")
 
+def get_resolver(resolver_type):
+    """
+    Dynamically import the appropriate resolver module based on user selection.
+    
+    Args:
+        resolver_type (str): The type of resolver to use ('default' or 'new')
+    
+    Returns:
+        function: The resolve function from the appropriate module
+    """
+    try:
+        if resolver_type == 'default':
+            from resolver import resolve
+        else:  # resolver_type == 'new'
+            from resolver_new import resolve
+        return resolve
+    except ImportError as e:
+        print(f"Error importing resolver module: {e}")
+        print(f"Make sure the module '{resolver_type}' exists and is accessible.")
+        sys.exit(1)
+
 def main():
     """
     Main function to run the propositional logic resolution prover.
@@ -115,7 +135,12 @@ def main():
     Returns:
         int: 0 for successful execution, 1 for errors
     """
-    kb_file, query_file, verbose, no_query = parse_arguments()
+    kb_file, query_file, verbose, no_query, resolver_type = parse_arguments()
+    
+    # Get the appropriate resolver
+    resolve = get_resolver(resolver_type)
+    print(f"Using {resolver_type} resolver implementation")
+    
     kb_sentences = read_from_file(kb_file)
     
     # Process the knowledge base
