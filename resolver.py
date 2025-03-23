@@ -117,6 +117,10 @@ def resolve(sentence, mode):
     initial_memory = get_memory_usage()
     peak_memory = initial_memory
     
+    # Memory check frequency control - check every N iterations
+    memory_check_frequency = 1000
+    iteration_counter = 0
+    
     # Initialize loading indicator if not in verbose mode
     loading = None
     if not mode:
@@ -152,7 +156,6 @@ def resolve(sentence, mode):
         print(f"  {{{', '.join(formatted_clauses)}}}")
         print(f"\n{Fore.CYAN}Resolution steps:{Style.RESET_ALL}")
 
-
     stats["initial_clauses"] = len(clause_set)
     step_counter = 0
     prev_length = 0
@@ -161,9 +164,12 @@ def resolve(sentence, mode):
         prev_length = len(clause_set)
         new_resolvents = set()
         
-        # Check current memory usage
-        current_memory = get_memory_usage()
-        peak_memory = max(peak_memory, current_memory)
+        # Check memory usage only at the start of each main iteration
+        if iteration_counter % memory_check_frequency == 0:
+            current_memory = get_memory_usage()
+            peak_memory = max(peak_memory, current_memory)
+        
+        iteration_counter += 1
         
         clause_list = list(clause_set)
         for i in range(len(clause_list)):
@@ -204,11 +210,7 @@ def resolve(sentence, mode):
                             stats["final_clause_count"] = len(clause_set) + len(set(new_resolvents)) 
                             
                             return True, time_taken, peak_memory, stats
-                
-                # Regular memory check during resolution
-                current_memory = get_memory_usage()
-                peak_memory = max(peak_memory, current_memory)
-            
+        
         # Add new resolvents to clause set
         clause_set.update(new_resolvents)
     
