@@ -26,7 +26,7 @@ To run the resolution prover, use the following command:
 python main.py <kb_file> <query_file> [-v]
 
 # Run with knowledge base and query files using improved resolver
-python main.py <kb_file> <query_file> [-v] [--resolver new]
+python main.py <kb_file> <query_file> [-v] --resolver new
 
 # Run only with knowledge base to check for knowledge base satisfiability
 python main.py <kb_file> --no-query [-v]
