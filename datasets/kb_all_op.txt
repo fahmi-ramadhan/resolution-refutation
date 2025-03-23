@@ -1,0 +1,30 @@
+# Knowledge base representing student course prerequisites and enrollment rules
+# Operators: | (OR), & (AND), ! (NOT), = (biconditional/equivalence), > (implication)
+# run with query 'can_take_database' to get the output 'Knowledge base entails the query.'
+# run with query 'passes_semester' to get the output 'Knowledge base does not entail the query.'
+
+# Basic facts
+has_math_prereq
+has_cs_prereq
+enrolled_in_calculus
+wants_to_graduate
+
+# Rules for course eligibility and graduation
+# If someone has math prerequisites and is enrolled in calculus, they are eligible for the advanced course
+has_math_prereq & enrolled_in_calculus > eligible_for_advanced_course
+
+# If someone is eligible for the advanced course OR has CS prerequisites, they can take the database course
+eligible_for_advanced_course | has_cs_prereq > can_take_database
+
+# Graduation requires either database OR advanced course
+wants_to_graduate > can_take_database | eligible_for_advanced_course
+
+# A student passes the semester if and only if they study hard AND attend all classes
+passes_semester = studies_hard & attends_all_classes
+
+# Negation example: If a student doesn't attend all classes, they won't receive participation credit
+!attends_all_classes > !receives_participation_credit
+
+# A student is either focusing on programming or theory, not both
+focusing_on_programming | focusing_on_theory
+!(focusing_on_programming & focusing_on_theory)
